@@ -1,0 +1,23 @@
+name: Pull Request Telegram Notification
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened]  # Trigger only when a new PR is opened
+
+jobs:
+  send_notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram Message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}  
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
+          message: |
+            New pull request opened on main branch:
+
+            Title: ${{ github.event.pull_request.title }}
+            Author: ${{ github.event.pull_request.user.login }}
+            URL: ${{ github.event.pull_request.html_url }}
