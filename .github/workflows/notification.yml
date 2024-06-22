@@ -21,12 +21,12 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           message: |
-            ✅ **New Pull Request Opened** in `${{ github.repository }}`
+            ✅ New Pull Request Opened in ${{ github.repository }}
 
-            **Title:** ${{ github.event.pull_request.title }}
-            **Author:** ${{ github.event.pull_request.user.login }}
-            **Source Branch:** ${{ github.event.pull_request.head.ref }}
-            **Link:** ${{ github.event.pull_request.html_url }}
+            Title: ${{ github.event.pull_request.title }}
+            Author: ${{ github.event.pull_request.user.login }}
+            Source Branch: ${{ github.event.pull_request.head.ref }}
+            Link: ${{ github.event.pull_request.html_url }}
 
       - name: Send Telegram Message for Closed PR
         if: github.event.action == 'closed'
@@ -35,10 +35,10 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           message: |
-            🚫 **Pull Request Closed** in `${{ github.repository }}`
+            🚫 Pull Request Closed in ${{ github.repository }}
 
-            **Title:** ${{ github.event.pull_request.title }}
-            **Author:** ${{ github.event.pull_request.user.login }}
-            **Source Branch:** ${{ github.event.pull_request.head.ref }}
-            **Merged:** ${{ github.event.pull_request.merged == true && 'Yes' || 'No' }}
-            **Link:** ${{ github.event.pull_request.html_url }}
+            Title: ${{ github.event.pull_request.title }}
+            Author: ${{ github.event.pull_request.user.login }}
+            Source Branch: ${{ github.event.pull_request.head.ref }}
+            Merged: ${{ github.event.pull_request.merged == true && 'Yes' || 'No' }}
+            Link: ${{ github.event.pull_request.html_url }}
