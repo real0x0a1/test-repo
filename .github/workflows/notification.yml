@@ -10,17 +10,37 @@ jobs:
   send_notification:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Telegram Message
+      - name: Set up job
+        id: job_info
+        run: echo "Job started"
+
+      - name: Send Telegram Message for Opened PR
+        if: github.event.action == 'opened'
         uses: appleboy/telegram-action@master
         with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}  
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           message: |
-            ${{ github.event.action == 'opened' && '✅ New Pull Request Opened' || '🚫 Pull Request Closed' }} in *${{ github.repository }}*
+            ✅ New Pull Request Opened in *${{ github.repository }}*
 
             **Details:**
             - **Title:** ${{ github.event.pull_request.title }}
             - **Author:** ${{ github.event.pull_request.user.login }}
             - **Source Branch:** ${{ github.event.pull_request.head.ref }}
-            - ${{ github.event.action == 'closed' && '*Merged:* ' + github.event.pull_request.merged || '' }}
+            - **Link:** ${{ github.event.pull_request.html_url }}
+
+      - name: Send Telegram Message for Closed PR
+        if: github.event.action == 'closed'
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            🚫 Pull Request Closed in *${{ github.repository }}*
+
+            **Details:**
+            - **Title:** ${{ github.event.pull_request.title }}
+            - **Author:** ${{ github.event.pull_request.user.login }}
+            - **Source Branch:** ${{ github.event.pull_request.head.ref }}
+            - **Merged:** ${{ github.event.pull_request.merged }}
             - **Link:** ${{ github.event.pull_request.html_url }}
