@@ -1,4 +1,4 @@
-name: Pull Request Telegram Notification
+name: Telegram Notification
 
 on:
   pull_request:
@@ -16,8 +16,10 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}  
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
           message: |
-            New pull request opened on main branch:
+            🚨 New Pull Request Opened on Main Branch 🚨
 
-            Title: ${{ github.event.pull_request.title }}
-            Author: ${{ github.event.pull_request.user.login }}
-            URL: ${{ github.event.pull_request.html_url }}
+            *Title:* ${{ github.event.pull_request.title }}
+            *Author:* ${{ github.event.pull_request.user.login }}
+            *Source Branch:* ${{ github.event.pull_request.head.ref }} 
+            *URL:* ${{ github.event.pull_request.html_url }}
+            *Repository:* ${{ github.repository }}
