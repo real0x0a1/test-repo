@@ -12,10 +12,6 @@ on:
     types: [opened, edited, deleted, closed, reopened]
   release:
     types: [published, created]
-  workflow_run:
-    workflows: ["CI/CD Pipeline with Telegram Notifications"]
-    types:
-      - completed
 
 jobs:
   send_notification:
@@ -203,17 +199,3 @@ jobs:
             Release: ${{ github.event.release.tag_name }}
             Author: ${{ github.event.release.author.login }}
             Link: ${{ github.event.release.html_url }}
-
-      # Workflow run events
-      - name: Send Telegram Message for Completed Workflow Run
-        if: github.event_name == 'workflow_run' && github.event.action == 'completed'
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          message: |
-            ✅ Workflow Run Completed in ${{ github.repository }}
-
-            Workflow: ${{ github.event.workflow_run.name }}
-            Status: ${{ github.event.workflow_run.conclusion }}
-            Link: ${{ github.event.workflow_run.html_url }}
