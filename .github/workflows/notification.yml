@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened]  # Trigger only when a new PR is opened
+    types: [opened, closed]
 
 jobs:
   send_notification:
@@ -16,10 +16,11 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}  
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
           message: |
-            🚨 New Pull Request Opened on Main Branch 🚨
+            ${{ github.event.action == 'opened' && '✅ New Pull Request Opened' || '🚫 Pull Request Closed' }} in *${{ github.repository }}*
 
-            *Title:* ${{ github.event.pull_request.title }}
-            *Author:* ${{ github.event.pull_request.user.login }}
-            *Source Branch:* ${{ github.event.pull_request.head.ref }} 
-            *URL:* ${{ github.event.pull_request.html_url }}
-            *Repository:* ${{ github.repository }}
+            **Details:**
+            - **Title:** ${{ github.event.pull_request.title }}
+            - **Author:** ${{ github.event.pull_request.user.login }}
+            - **Source Branch:** ${{ github.event.pull_request.head.ref }}
+            - ${{ github.event.action == 'closed' && '*Merged:* ' + github.event.pull_request.merged || '' }}
+            - **Link:** ${{ github.event.pull_request.html_url }}
